@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Simple geometric mark — brand assets arrive with design handoff (HAP-19). -->
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M54,28c-8,0 -14,6 -14,14c0,4 2,8 5,10c-6,2 -10,8 -10,14c0,9 7,16 16,16h6c9,0 16,-7 16,-16c0,-6 -4,-12 -10,-14c3,-2 5,-6 5,-10c0,-8 -6,-14 -14,-14z" />
+</vector>

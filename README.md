@@ -8,14 +8,14 @@ HappyPaws **records** caregiver-managed care data. It does **not** diagnose, pre
 
 | Field | Value |
 | --- | --- |
-| Status | **Pre-implementation / documentation initialization** (HAP-13). Android application code is not complete. |
+| Status | **Foundation bootstrap** (HAP-14). Empty Compose shell only — product features are not implemented. |
 | App ID | `com.auramislab.happypaws` |
-| Platform | Android (target stack documented; app not bootstrapped in this Task) |
-| Backend posture | Firebase-first (Auth, Firestore, Storage, FCM, App Check) — configuration is out of scope for HAP-13 |
+| Platform | Android (Kotlin, Jetpack Compose, Material 3) |
+| Backend posture | Firebase-first (Auth, Firestore, Storage, FCM, App Check) — **not configured in HAP-14**; no `google-services.json` |
 | Auth (planned) | Google Sign-In + Email/Password |
 | Monetization (planned) | Ads + Premium (Play Billing), isolated from care domain |
 
-### Planned SDK / build targets
+### SDK / build targets
 
 | Item | Value |
 | --- | --- |
@@ -24,8 +24,6 @@ HappyPaws **records** caregiver-managed care data. It does **not** diagnose, pre
 | targetSdk | 36 |
 | Gradle JDK | 21 |
 | JVM target | 17 |
-
-These targets are planning constraints for upcoming foundation Tasks (for example HAP-14). This repository does **not** yet contain an Android/Gradle project from HAP-13.
 
 ## Medical-safety disclaimer
 
@@ -90,13 +88,44 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for commit and PR conventions.
 
 ## Design handoff gate (HAP-19)
 
-**HAP-19** (Validate Figma/design-handoff) gates Tasks that require final approved UI/design assets. Do not treat Figma as approved for UI implementation until HAP-19 is Done. Foundation documentation (this Task) may proceed without that gate.
+**HAP-19** (Validate Figma/design-handoff) gates Tasks that require final approved UI/design assets. Do not treat Figma as approved for UI implementation until HAP-19 is Done. HAP-14 bootstrap uses default Material 3 only (no Figma token implementation).
 
-## Setup placeholders
+## Development setup
 
-Android/Gradle/Firebase bootstrap is **out of scope for HAP-13** and will be introduced by later Tasks (starting with HAP-14). Until then:
+### Prerequisites
+
+* **JDK 21** for the Gradle daemon (Android Studio JBR is fine)
+* **Android Studio** (recent stable) with Android SDK Platform **36** and Build-Tools
+* Android SDK installed; set `ANDROID_HOME` / `ANDROID_SDK_ROOT` (or let Android Studio create `local.properties`)
+
+### Configure local SDK path
+
+Create `local.properties` at the repo root (gitignored — do not commit):
+
+```properties
+sdk.dir=/path/to/Android/Sdk
+```
+
+Use your machine path. Never commit absolute SDK paths, keystores, or Firebase credentials.
+
+### Build
+
+```bash
+./gradlew :app:assembleDebug
+```
+
+Debug APK output: `app/build/outputs/apk/debug/app-debug.apk`
+
+### JDK mismatch notes
+
+* Gradle must run on **JDK 21**.
+* App bytecode targets **JVM 17** (`compileOptions` / `kotlinOptions.jvmTarget`).
+* If you see toolchain errors, point `JAVA_HOME` at a JDK 21 install (for example Android Studio’s bundled JBR).
+
+### Secrets policy
 
 * No `google-services.json`, keystores, API keys, or production Firebase project identifiers belong in this repository.
+* Firebase plugins/credentials are out of scope for HAP-14 (later Tasks).
 * Cursor project rules for agents live in [`.cursor/rules/happypaws-project.mdc`](.cursor/rules/happypaws-project.mdc).
 
 ## License
