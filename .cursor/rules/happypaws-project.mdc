@@ -1,0 +1,140 @@
+---
+description: HappyPaws project execution rules for agents and contributors
+alwaysApply: true
+---
+
+# HappyPaws project rules
+
+## Identity
+
+* Product name: **HappyPaws** (never HappyPets; PawMinder only as historical Figma filename metadata)
+* Subtitle: Pet Routine & Medication Tracker
+* Application ID: `com.auramislab.happypaws`
+* Organization: AuraMis Lab
+* Workspace (this clone): Android HappyPaws repository root
+
+## Authoritative URLs
+
+* GitHub: https://github.com/efrshuvo-bd/happypaws
+* Default branch: `main`
+* Integration branch: `develop`
+* Jira project: HAP — https://auramislab.atlassian.net/browse/HAP
+* Board: https://auramislab.atlassian.net/jira/software/projects/HAP/boards/72
+* Confluence space: HA — parent https://auramislab.atlassian.net/wiki/spaces/HA/pages/5898628
+* Figma (do not modify unless the Task explicitly requires design edits): https://www.figma.com/design/64SUV67cE0iWkNh41LLMKH/HappyPawsContinue-the-existing-%E2%80%9CPawMinder-%E2%80%94-Pet-Routine---Medication-Tracker
+
+Confluence is planning authority. Repository `docs/` mirrors must not invent conflicting requirements.
+
+## Planned SDK / build constraints
+
+* minSdk 26
+* compileSdk 36
+* targetSdk 36
+* Gradle JDK 21
+* JVM target 17
+* Firebase-first backend (Auth, Firestore, Storage, FCM, App Check)
+* Auth: Google Sign-In + Email/Password
+* Monetization: Ads + Premium (isolated modules)
+
+Do not claim Android implementation is complete until the relevant Tasks and quality gates are Done.
+
+## Workflow (mandatory)
+
+`To Do → In Progress → In Review → Done`
+
+* To Do → In Progress only after Task preflight passes
+* In Progress → In Review only after validation passes **and** the PR is open
+* Done only after human merge **and** post-merge validation on `origin/develop`
+* Testing is an In Progress / post-merge gate — not a separate Jira status
+* Do **not** self-merge PRs
+* Do **not** move to Done without real evidence
+* Never fabricate PR numbers, commit hashes, test results, or release evidence
+
+## One Task / one branch
+
+* Execute only the assigned Task; do not start HAP-14+ (or any other Task) unless explicitly instructed
+* One implementation Task in Progress/In Review at a time unless a human explicitly directs otherwise
+* Branch formats:
+  * Implementation: `task/HAP-<n>-kebab-summary`
+  * Docs (when specified): `docs/HAP-<n>-kebab-summary`
+* Always branch from latest `origin/develop` (not stale local `develop` / `main`)
+* Never commit directly to `main` or `develop`
+* Push only the Task branch
+
+## Validation before PR
+
+* Satisfy the Task acceptance criteria and repository validation checklist
+* Prefer existing project linters/tests; do not install unrelated global tools
+* Keep diffs scoped to the Task; do not stage unrelated or user-owned untracked files
+
+## After PR open
+
+* Comment evidence on the Jira Task (branch, commit, PR URL/number, base/head, validation, scope)
+* Move In Progress → In Review
+* Stop and wait for human review unless the human explicitly continues
+
+## Preserve user / untracked files
+
+* Identify untracked or user-owned files during preflight
+* Do not stage, modify, delete, or commit them unless the Task explicitly owns them
+
+## Secrets and production config
+
+Forbidden in git and docs:
+
+* API keys, tokens, passwords
+* `google-services.json` / Firebase production identifiers
+* Keystores, keystore passwords, signing configs with secrets
+* Production endpoint credentials
+
+Use secret managers / local ignore patterns when configuration Tasks arrive.
+
+## Medical safety
+
+* Record, do not diagnose or prescribe
+* Never silently alter, calculate, or round dose text
+* Tapering requires explicit steps
+* Duplicate-dose: warn + acknowledge; retain conflicting Given evidence on sync
+* No ads on critical medical-safety surfaces
+* Serious reactions: direct caregivers to seek veterinary care
+
+## Accessibility
+
+* TalkBack labels and focus order on primary flows
+* Large font / dose readability
+* Contrast; do not convey critical state by color alone
+
+## Offline / sync / duplicate-dose
+
+* Room (local) is source of truth for critical care data when offline architecture is implemented
+* Queue durable mutations; surface conflicts; never last-write-wins for dose Given events
+* Airplane-mode critical reads (today / med due / emergency cache) are required by NFR offline rules
+
+## Quality gates and release
+
+* Exactly one Quality Gate Task per Epic (see Project Plan)
+* Publish `docs/test-reports/<epic-key>-test-report.md` at each Epic QG — no fabricated content
+* Internal release only after HAP-12 quality gate and Completion Report process
+* Completion Report remains **Template — Not Yet Completed** until a real release completion Task fills it
+
+## Design handoff (HAP-19)
+
+* HAP-19 gates Tasks needing final approved UI/design assets
+* Do not treat Figma as approved for UI implementation before HAP-19 is Done
+* Do not modify Figma unless the active Task explicitly requires it
+
+## Stop conditions
+
+Stop and report (no speculative fixes outside scope) when:
+
+* Preflight fails
+* Tracked files have unexpected conflicting user changes
+* Required dependencies are not Done
+* Another implementation Task is already In Progress or In Review
+* Secrets would be required to proceed
+* Scope would expand into a later Task (for example HAP-14+)
+* PR checks or human review block progress
+
+## Cursor rules location
+
+HappyPaws execution policy lives in this repository under `.cursor/rules/`. Do not create global Cursor rules outside the repo for this project's workflow authority.
