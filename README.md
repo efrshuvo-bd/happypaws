@@ -8,7 +8,7 @@ HappyPaws **records** caregiver-managed care data. It does **not** diagnose, pre
 
 | Field | Value |
 | --- | --- |
-| Status | **Architecture foundation** (HAP-15). Package layering + Hilt DI + NavHost placeholder — product features are not implemented. |
+| Status | **Foundation** — architecture (HAP-15) complete; CI/PR template (HAP-16) in progress. Product features are not implemented. |
 | App ID | `com.auramislab.happypaws` |
 | Platform | Android (Kotlin, Jetpack Compose, Material 3, Hilt) |
 | Backend posture | Firebase-first (Auth, Firestore, Storage, FCM, App Check) — **not configured yet**; no `google-services.json` |
@@ -115,6 +115,14 @@ Use your machine path. Never commit absolute SDK paths, keystores, or Firebase c
 ```
 
 Debug APK output: `app/build/outputs/apk/debug/app-debug.apk`
+
+### Local validation (same as CI)
+
+```bash
+./gradlew :app:lintDebug :app:testDebugUnitTest :app:assembleDebug
+```
+
+GitHub Actions runs these checks on pull requests and pushes to `develop` / `main` (see [`.github/workflows/ci.yml`](.github/workflows/ci.yml)). Use the PR template under [`.github/pull_request_template.md`](.github/pull_request_template.md). Branch protection requiring the **CI** check is admin-applied — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### JDK mismatch notes
 
