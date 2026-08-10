@@ -8,10 +8,10 @@ HappyPaws **records** caregiver-managed care data. It does **not** diagnose, pre
 
 | Field | Value |
 | --- | --- |
-| Status | **Foundation bootstrap** (HAP-14). Empty Compose shell only — product features are not implemented. |
+| Status | **Architecture foundation** (HAP-15). Package layering + Hilt DI + NavHost placeholder — product features are not implemented. |
 | App ID | `com.auramislab.happypaws` |
-| Platform | Android (Kotlin, Jetpack Compose, Material 3) |
-| Backend posture | Firebase-first (Auth, Firestore, Storage, FCM, App Check) — **not configured in HAP-14**; no `google-services.json` |
+| Platform | Android (Kotlin, Jetpack Compose, Material 3, Hilt) |
+| Backend posture | Firebase-first (Auth, Firestore, Storage, FCM, App Check) — **not configured yet**; no `google-services.json` |
 | Auth (planned) | Google Sign-In + Email/Password |
 | Monetization (planned) | Ads + Premium (Play Billing), isolated from care domain |
 
@@ -48,7 +48,7 @@ Confluence space **HA** is the planning authority. Repository docs under `docs/`
 | Test Guidelines and Quality Strategy | [docs/test-guidelines-and-quality-strategy.md](docs/test-guidelines-and-quality-strategy.md) | [5898707](https://auramislab.atlassian.net/wiki/spaces/HA/pages/5898707) |
 | Requirements Traceability Matrix | [docs/requirements-traceability-matrix.md](docs/requirements-traceability-matrix.md) | [5996570](https://auramislab.atlassian.net/wiki/spaces/HA/pages/5996570) |
 | Completion Report | [docs/completion-report.md](docs/completion-report.md) | [5996547](https://auramislab.atlassian.net/wiki/spaces/HA/pages/5996547) |
-| ADR stubs | [docs/adrs/](docs/adrs/) | (see Architecture §37) |
+| ADRs | [docs/adrs/](docs/adrs/) | (see Architecture §37; ADR-001–007) |
 | Test report stubs | [docs/test-reports/](docs/test-reports/) | — |
 | Security stubs | [docs/security/](docs/security/) | — |
 | Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) | — |
@@ -88,7 +88,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for commit and PR conventions.
 
 ## Design handoff gate (HAP-19)
 
-**HAP-19** (Validate Figma/design-handoff) gates Tasks that require final approved UI/design assets. Do not treat Figma as approved for UI implementation until HAP-19 is Done. HAP-14 bootstrap uses default Material 3 only (no Figma token implementation).
+**HAP-19** (Validate Figma/design-handoff) gates Tasks that require final approved UI/design assets. Do not treat Figma as approved for UI implementation until HAP-19 is Done. HAP-15 keeps default Material 3 only (no Figma token implementation; tokens → HAP-23).
 
 ## Development setup
 

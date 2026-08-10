@@ -3,13 +3,14 @@
 | Field | Value |
 | --- | --- |
 | Document owner | Engineering Lead (AuraMis Lab) |
-| Version | 0.1.0 |
-| Status | Pre-Implementation |
-| Last updated | 2026-08-08 |
+| Version | 0.2.0 |
+| Status | Architecture foundation (HAP-15) |
+| Last updated | 2026-08-11 |
 | Confluence | [HappyPaws Architecture Document](https://auramislab.atlassian.net/wiki/spaces/HA/pages/5898685) |
 | Parent | [HappyPaws — Pet Routine & Medication Tracker](https://auramislab.atlassian.net/wiki/spaces/HA/pages/5898628) |
+| Repo ADRs | [docs/adrs/](adrs/) |
 
-> Repository mirror of Confluence planning authority. Prefer Confluence if they diverge until HAP-13 alignment is merged.
+> Repository mirror of Confluence planning authority. Prefer Confluence if they diverge. HAP-15 adds in-repo package scaffolding + ADR files without inventing conflicting requirements.
 
 `To Do → In Progress → In Review → Done`  
 Testing = In Progress gate + post-merge validation before Done
@@ -18,7 +19,7 @@ Testing = In Progress gate + post-merge validation before Done
 
 This document defines the target architecture for HappyPaws (`com.auramislab.happypaws`), an Android pet routine and medication tracker. It guides implementation Epics HAP-1–HAP-12 without including secrets, credentials, or Firebase project identifiers.
 
-**Status:** Pre-Implementation. Design handoff is Pending.
+**Status:** Architecture foundation in progress (HAP-15). Design handoff is Pending (HAP-19).
 
 ## 2. Goals and non-goals
 
@@ -80,6 +81,23 @@ This document defines the target architecture for HappyPaws (`com.auramislab.hap
 
 Dependency rule: `feature → domain/core`; `ads/billing` must not import medication domain internals; `app` wires all.
 
+### 5.1 Current bootstrap layout (HAP-15)
+
+Gradle still has a single `:app` module. Target multi-modules above remain the destination; HAP-15 establishes **package layering inside `:app`** so later extractions are mechanical:
+
+| Package | Layer |
+| --- | --- |
+| `com.auramislab.happypaws` | Application + `MainActivity` (DI root, single activity) |
+| `...core.common` | Shared primitives (`Outcome`, `AppClock`) |
+| `...domain.foundation` | Sample repository/use-case contracts (no feature models) |
+| `...data.foundation` | In-memory repository stub (no Firebase/Room yet) |
+| `...di` | Hilt `@Module` bindings |
+| `...ui.navigation` | NavHost + route placeholders |
+| `...ui.foundation` | Architecture home UI / ViewModel |
+| `...ui.theme` | Default Material 3 theme (tokens → HAP-23) |
+
+Secrets, `google-services.json`, and production Firebase identifiers remain forbidden.
+
 ## 6. Layering: UI / domain / data
 
 ### UI
@@ -103,10 +121,11 @@ Dependency rule: `feature → domain/core`; `ads/billing` must not import medica
 
 ## 7. Dependency injection
 
-* Hilt (or project-standard DI) at app/feature boundaries
-* Singleton for DB, sync engine, auth state
+* **Hilt** is the project-standard DI (ADR-007); Koin is not used
+* `@HiltAndroidApp` on `HappyPawsApp`; `@AndroidEntryPoint` on `MainActivity`
+* Singleton for DB, sync engine, auth state (when those Tasks land)
 * Fake bindings in androidTest/unitTest
-* Clock abstraction for timezone/DST tests
+* Clock abstraction (`AppClock`) for timezone/DST tests
 
 ## 8. Navigation architecture
 
@@ -324,6 +343,15 @@ Branches: `main`, `develop`, `task/HAP-…`, later `release/internal-vX.Y.Z`. PR
 * **Decision:** Functions for token/deletion/abuse cases
 * **Consequences:** Smaller serverless surface
 
+### ADR-007 — Hilt dependency injection
+
+* **Context:** Need compile-time DI aligned with AuraMis Android apps
+* **Decision:** Hilt + KSP; reject Koin for this repo
+* **Consequences:** Plugin/KSP wiring in `:app`; feature `@Module`s over time
+* **File:** [adrs/ADR-007-hilt-dependency-injection.md](adrs/ADR-007-hilt-dependency-injection.md)
+
+Full ADR files: [docs/adrs/](adrs/).
+
 ## 38. Limitations (Phase 0 / MVP)
 
 * Design handoff incomplete (PawMinder naming residual in Figma URL — historical metadata only)
@@ -357,3 +385,4 @@ Branches: `main`, `develop`, `task/HAP-…`, later `release/internal-vX.Y.Z`. PR
 | --- | --- | --- |
 | 0.1.0 | 2026-08-08 | Phase 0 architecture baseline |
 | 0.1.0-repo | 2026-08-08 | HAP-13 repository documentation mirror |
+| 0.2.0 | 2026-08-11 | HAP-15 package layering, Hilt DI, ADR files |
