@@ -52,8 +52,36 @@ Rules:
 * Base branch: **`develop`**
 * Head: the Task branch only
 * Body should include: summary, scope / out of scope, validation evidence, links to Jira/Confluence, and residual risks.
+* Use the repository PR template under [`.github/pull_request_template.md`](.github/pull_request_template.md).
 * Include: `Do not merge automatically. Human approval is required.`
 * Do not squash/rebase-merge/close without human direction when operating as an agent under HappyPaws rules.
+
+## Continuous integration (HAP-16)
+
+GitHub Actions workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+
+Required local / CI checks for implementation PRs:
+
+| Check | Command |
+| --- | --- |
+| Lint | `./gradlew :app:lintDebug` |
+| Unit tests | `./gradlew :app:testDebugUnitTest` |
+| Debug assemble | `./gradlew :app:assembleDebug` |
+
+Triggers: `pull_request` and `push` to `develop` / `main`, plus `workflow_dispatch`.
+
+No emulator jobs, Play release pipelines, Firebase App Distribution, or signing secrets in foundation CI. Secrets belong in GitHub Actions secrets / local secret stores only — never in workflow YAML.
+
+### Branch protection (admin-applied)
+
+Repository admins should configure branch protection on `develop` (and later `main`) to:
+
+* Require a pull request before merging
+* Require the **CI** workflow to pass
+* Disallow force-pushes
+* Prefer disallowing self-approve / require human review for merges
+
+Agents must not self-merge even if protection is not yet enabled.
 
 ## Testing and quality
 
